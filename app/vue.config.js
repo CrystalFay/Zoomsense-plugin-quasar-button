@@ -3,9 +3,7 @@ module.exports = {
     extract: false,
   },
   configureWebpack: {
-    externals: {
-      quasar: /^quasar$/i,
-    },
+    externals: [/^quasar\/.+$/, /^firebase\/.+$/, /^core-js\/.+$/],
   },
 
   pluginOptions: {
