@@ -25,7 +25,9 @@ export default {
         // console.log(this.firebase);
         this.$rtdbBind(
           "slides",
-          this.firebase.ref(`config/${this.context.meetingid}/current/slides`)
+          this.firebase.ref(
+            `config/${this.context.meetingid}/current/currentState/plugins/slides`
+          )
         );
       },
     },

@@ -32,7 +32,9 @@ export default {
       }
       this.slides.currentslide++;
       await this.firebase
-        .ref(`config/${this.context.meetingid}/current/slides/currentslide`)
+        .ref(
+          `config/${this.context.meetingid}/current/currentState/plugins/slides/currentslide`
+        )
         .set(this.slides.currentslide);
     },
     async prev() {
@@ -41,7 +43,9 @@ export default {
       }
       this.slides.currentslide--;
       await this.firebase
-        .ref(`config/${this.context.meetingid}/current/slides/currentslide`)
+        .ref(
+          `config/${this.context.meetingid}/current/currentState/plugins/slides/currentslide`
+        )
         .set(this.slides.currentslide);
     },
   },
@@ -52,7 +56,9 @@ export default {
         // console.log(this.firebase);
         this.$rtdbBind(
           "slides",
-          this.firebase.ref(`config/${this.context.meetingid}/current/slides`)
+          this.firebase.ref(
+            `config/${this.context.meetingid}/current/currentState/plugins/slides`
+          )
         );
       },
     },
