@@ -1,5 +1,7 @@
-<template>
-  <div>{{ slides.currentslide }}</div>
+<template lang="pug">
+.slide
+  div {{ slides.currentslide }}
+  div {{ content }}
 </template>
 
 <script>
@@ -11,6 +13,11 @@ export default {
     },
     context: {
       required: false,
+    },
+  },
+  computed: {
+    content() {
+      return this.slides.content[this.slides.currentslide];
     },
   },
   data: () => {
@@ -34,3 +41,13 @@ export default {
   },
 };
 </script>
+<style lang="scss" scoped>
+.slide {
+  width: 400px;
+  height: 400px;
+  background: #33333366;
+  color: white;
+  padding: 20px;
+  font-size: 26px;
+}
+</style>
