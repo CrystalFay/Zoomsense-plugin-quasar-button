@@ -8,13 +8,15 @@
     "lint": "vue-cli-service lint"
   },
   "dependencies": {
-    "@paciolan/remote-module-loader": "^2.6.2",
-    "@quasar/extras": "^1.10.11",
     "core-js": "^3.6.5",
-    "quasar": "^1.0.0",
     "vue": "^2.6.11"
   },
+  "peerDependencies": {
+    "@quasar/extras": "^1.10.11",
+    "quasar": "^1.0.0"
+  },
   "devDependencies": {
+    "@paciolan/remote-module-loader": "^2.6.2",
     "@vue/cli-plugin-babel": "~4.5.15",
     "@vue/cli-plugin-eslint": "~4.5.15",
     "@vue/cli-service": "~4.5.15",

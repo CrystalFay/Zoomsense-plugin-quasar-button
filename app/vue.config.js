@@ -1,10 +1,11 @@
 module.exports = {
+  css: {
+    extract: false,
+  },
   configureWebpack: {
-    // externals: {
-    //   firebase: "firebase",
-    //   vuefire: "vuefire",
-    //   quasar: "quasar",
-    // },
+    externals: {
+      quasar: /^quasar$/i,
+    },
   },
 
   pluginOptions: {
