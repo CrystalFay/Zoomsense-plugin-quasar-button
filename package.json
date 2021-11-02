@@ -1,0 +1,19 @@
+{
+  "name": "zoomsense-plugin-slides",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://gitlab.com/action-lab-aus/zoomsense/zoomsense-plugin-slides.git"
+  },
+  "author": "ZoomSense",
+  "license": "MIT",
+  "zoomsense": {
+    "displayname": "Slides",
+    "requires": {}
+  }
+}
