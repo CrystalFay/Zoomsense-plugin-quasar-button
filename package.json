@@ -16,8 +16,7 @@
     "displayname": "Slides",
     "requires": {},
     "exports": [
-      "functions",
-      "Display",
+      "Dashboard",
       "Overlay"
     ]
   }
