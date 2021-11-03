@@ -1,10 +1,11 @@
 <template lang="pug">
-.slide
-  div {{ slides.currentslide }}
-  div {{ content }}
+.slide(v-if="visible")
+  div(v-html="content")
 </template>
 
 <script>
+import { marked } from "marked";
+
 export default {
   name: "SlidesOverlay",
   props: {
@@ -17,7 +18,15 @@ export default {
   },
   computed: {
     content() {
-      return this.slides.content[this.slides.currentslide];
+      try {
+        return marked.parse(this.slides.content[this.slides.currentslide]);
+      } catch {
+        return this.slides.content[this.slides.currentslide];
+      }
+    },
+    visible() {
+      if (typeof this.slides.visible == undefined) return true;
+      else return this.slides.visible;
     },
   },
   data: () => {
@@ -44,10 +53,9 @@ export default {
 <style lang="scss">
 .slide {
   width: 400px;
-  height: 400px;
+  height: 225px;
   background: #33333366;
   color: white;
-  padding: 20px;
   font-size: 26px;
 }
 </style>
