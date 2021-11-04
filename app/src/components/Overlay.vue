@@ -1,10 +1,22 @@
 <template lang="pug">
-.slide(v-if="visible")
-  div(v-html="content")
+transition(
+  :key="visible",
+  enter-active-class="animate__animated animate__fadeIn animate__fast",
+  leave-active-class="animate__animated animate__fadeOut animate__fast"
+)
+  .content(v-if="visible")
+    .column.justify-center.full-height
+      .slide
+        transition(
+          mode="out-in",
+          enter-active-class="animate__animated animate__fadeIn animate__fast",
+          leave-active-class="animate__animated animate__fadeOut animate__fast"
+        )
+          .markdown(v-html="content", :key="slides.currentslide")
 </template>
 
 <script>
-import { marked } from "marked";
+var md = require("markdown-it")();
 
 export default {
   name: "SlidesOverlay",
@@ -19,7 +31,7 @@ export default {
   computed: {
     content() {
       try {
-        return marked.parse(this.slides.content[this.slides.currentslide]);
+        return md.render(this.slides.content[this.slides.currentslide]);
       } catch {
         return this.slides.content[this.slides.currentslide];
       }
@@ -50,12 +62,62 @@ export default {
   },
 };
 </script>
+
+<style src="animate.css/animate.css">
+/* global styles */
+</style> 
+
 <style lang="scss">
 .slide {
-  width: 400px;
-  height: 225px;
-  background: #33333366;
+  background: rgb(1, 77, 109);
   color: white;
+  border-radius: 5px;
   font-size: 26px;
+  height: 412px;
+  width: 550px;
+  filter: drop-shadow(0 0 10px black);
+  overflow: hidden;
+}
+
+.content {
+  position: absolute;
+  height: 720px;
+  width: 480px;
+  z-index: -3;
+  left: 10px;
+  transform: perspective(1500px) rotateY(15deg);
+}
+
+.markdown {
+  h1 {
+    font-size: 28px;
+    padding: 10px;
+    margin: 0;
+    line-height: 28px;
+  }
+
+  font-weight: 300;
+
+  ul {
+    margin-left: 10px;
+    margin-top: 0;
+    margin-bottom: 0;
+    padding-left: 25px;
+    li {
+      padding: 0;
+      margin: 0;
+    }
+  }
+
+  p {
+    padding: 10px;
+    font-size: 18px;
+  }
+
+  img {
+    margin-left: -10px;
+    margin-top: -10px;
+    width: 550px;
+  }
 }
 </style>
