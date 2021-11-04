@@ -12,11 +12,14 @@ transition(
           enter-active-class="animate__animated animate__fadeIn animate__fast",
           leave-active-class="animate__animated animate__fadeOut animate__fast"
         )
-          .markdown(v-html="content", :key="slides.currentslide")
+          Markdown(
+            :content="slides.content[slides.currentslide]",
+            :key="slides.content[slides.currentslide]"
+          )
 </template>
 
 <script>
-var md = require("markdown-it")();
+import Markdown from "./Markdown.vue";
 
 export default {
   name: "SlidesOverlay",
@@ -28,14 +31,10 @@ export default {
       required: false,
     },
   },
+  components: {
+    Markdown,
+  },
   computed: {
-    content() {
-      try {
-        return md.render(this.slides.content[this.slides.currentslide]);
-      } catch {
-        return this.slides.content[this.slides.currentslide];
-      }
-    },
     visible() {
       if (typeof this.slides.visible == undefined) return true;
       else return this.slides.visible;

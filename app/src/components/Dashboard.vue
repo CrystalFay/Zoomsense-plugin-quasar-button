@@ -8,9 +8,15 @@ div
     .col.text-center {{ currentSlide }} of {{ totalSlides }}
     .col-auto
       q-btn(outline, @click="next") Next
+    .col-auto
+      .scaled_wrap
+        .scaled
+          Markdown(:content="nextslide")
 </template>
 
 <script>
+import Markdown from "./Markdown.vue";
+
 export default {
   name: "Dashboard",
   props: {
@@ -20,6 +26,9 @@ export default {
     context: {
       required: false,
     },
+  },
+  components: {
+    Markdown,
   },
   data: () => {
     return {
@@ -32,6 +41,14 @@ export default {
     },
     totalSlides() {
       return this.slides.content ? this.slides.content.length : 0;
+    },
+    nextslide() {
+      if (
+        this.slides.content &&
+        this.slides.content.length > this.slides.currentslide
+      )
+        return this.slides.content[this.slides.currentslide + 1];
+      else return "";
     },
   },
   methods: {
@@ -90,3 +107,20 @@ export default {
   },
 };
 </script>
+
+<style lang="scss" scoped>
+.scaled {
+  width: 550px;
+  background: silver;
+  height: 412px;
+  overflow: hidden;
+  transform: scale(0.4);
+  transform-origin: top left;
+}
+
+.scaled_wrap {
+  width: 219px;
+  overflow: hidden;
+  height: 165px;
+}
+</style>
