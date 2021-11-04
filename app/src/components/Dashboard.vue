@@ -6,16 +6,27 @@ div
     .col-auto
       q-btn(@click="prev", outline) Prev
     .col.text-center {{ currentSlide }} of {{ totalSlides }}
+    .col 
+      div(v-for="input in getInputs", :key="input.field")
+        q-input(
+          outlined,
+          autogrow,
+          :label="input.title",
+          @input="updateField($event, input.field)",
+          :value="inputs[input.field]"
+        )
     .col-auto
       q-btn(outline, @click="next") Next
     .col-auto
       .scaled_wrap
         .scaled
-          Markdown(:content="nextslide")
+          Markdown(:content="nextslide", :inputs="inputs")
 </template>
 
 <script>
 import Markdown from "./Markdown.vue";
+
+const regex = /^:::\s(.*):(.*)\n$/gm;
 
 export default {
   name: "Dashboard",
@@ -33,9 +44,25 @@ export default {
   data: () => {
     return {
       slides: {},
+      inputs: {},
     };
   },
   computed: {
+    getInputs() {
+      if (!this.slides.content) return;
+      //parse current content for input tags:
+      let text = this.slides.content[this.slides.currentslide];
+
+      // console.log(text);
+      let inputs = [...text.matchAll(regex)];
+
+      return inputs.map((el) => {
+        return {
+          field: el[1],
+          title: el[2],
+        };
+      });
+    },
     currentSlide() {
       return this.slides.currentslide + 1;
     },
@@ -52,6 +79,16 @@ export default {
     },
   },
   methods: {
+    updateField(event, field) {
+      console.log(event);
+      //write to firebase data node
+      //TODO: debounce, and
+
+      //also update the markdown display:
+      this.firebase
+        .ref(`data/${this.context.meetingid}/slides/${field}`)
+        .set(event);
+    },
     async updateVisible() {
       await this.firebase
         .ref(
@@ -94,8 +131,13 @@ export default {
   watch: {
     firebase: {
       immediate: true,
-      handler() {
+      async handler() {
         // console.log(this.firebase);
+        this.$rtdbBind(
+          "inputs",
+          this.firebase.ref(`data/${this.context.meetingid}/slides`)
+        );
+
         this.$rtdbBind(
           "slides",
           this.firebase.ref(

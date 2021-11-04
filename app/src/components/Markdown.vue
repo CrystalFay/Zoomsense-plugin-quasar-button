@@ -1,9 +1,12 @@
 <template lang="pug">
-.markdown(v-html="mark")
+div
+  .markdown(v-html="mark")
 </template>
 
 <script>
-var md = require("markdown-it")();
+const md = require("markdown-it")();
+
+let regex = /^:::\s(.*):.*\n\s*:::$/gm;
 
 export default {
   name: "Markdown",
@@ -11,11 +14,29 @@ export default {
     content: {
       required: true,
     },
+    inputs: {},
+  },
+  methods: {
+    getInput(field) {
+      return this.inputs[field];
+    },
   },
   computed: {
     mark() {
       try {
-        return md.render(this.content);
+        //replace the input content here:
+        let inputs = [...this.content.matchAll(regex)];
+
+        let tmp = this.content.toString();
+
+        for (let field of inputs) {
+          tmp = tmp.replace(
+            field[0],
+            md.utils.escapeHtml(this.getInput(field[1]))
+          );
+        }
+
+        return md.render(tmp);
       } catch {
         return this.content;
       }
@@ -55,6 +76,20 @@ export default {
     margin-left: -10px;
     margin-top: -10px;
     width: 550px;
+  }
+
+  .input {
+    color: red;
+  }
+
+  table {
+    width: 100%;
+    th {
+      border-bottom: 1px silver solid;
+    }
+    td {
+      text-align: center;
+    }
   }
 }
 </style>

@@ -14,7 +14,8 @@ transition(
         )
           Markdown(
             :content="slides.content[slides.currentslide]",
-            :key="slides.content[slides.currentslide]"
+            :key="slides.content[slides.currentslide]",
+            :inputs="inputs"
           )
 </template>
 
@@ -43,6 +44,7 @@ export default {
   data: () => {
     return {
       slides: {},
+      inputs: {},
     };
   },
   watch: {
@@ -55,6 +57,11 @@ export default {
           this.firebase.ref(
             `config/${this.context.meetingid}/current/currentState/plugins/slides`
           )
+        );
+
+        this.$rtdbBind(
+          "inputs",
+          this.firebase.ref(`data/${this.context.meetingid}/slides`)
         );
       },
     },
