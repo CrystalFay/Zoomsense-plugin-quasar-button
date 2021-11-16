@@ -86,6 +86,7 @@ export default {
 
 <style lang="scss">
 .slide {
+  background: rgb(1, 77, 109);
   color: white;
   border-radius: 5px;
   font-size: 26px;
@@ -105,8 +106,6 @@ export default {
 }
 
 .markdown {
-  background: rgb(1, 77, 109);
-
   h1 {
     font-size: 28px;
     padding: 10px;
