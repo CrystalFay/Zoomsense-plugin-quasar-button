@@ -18,6 +18,22 @@
     "exports": [
       "Dashboard",
       "Overlay"
-    ]
+    ],
+    "settings": {
+      "visible": {
+        "desc": "Make slides visible",
+        "type": "Boolean",
+        "required": true
+      },
+      "slides": {
+        "desc": "List of slide content. Can include data input blocks.",
+        "type": "Array",
+        "required": true
+      },
+      "style": {
+        "desc": "Additional CSS to apply to each slide",
+        "type": "String"
+      }
+    }
   }
 }

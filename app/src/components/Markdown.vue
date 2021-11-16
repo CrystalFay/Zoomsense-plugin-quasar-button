@@ -1,6 +1,5 @@
 <template lang="pug">
-div
-  .markdown(v-html="mark")
+.markdown(v-html="mark")
 </template>
 
 <script>
@@ -18,7 +17,7 @@ export default {
   },
   methods: {
     getInput(field) {
-      return this.inputs[field];
+      return this.inputs[field] || "";
     },
   },
   computed: {

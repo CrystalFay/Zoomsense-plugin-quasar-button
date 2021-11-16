@@ -12,7 +12,8 @@ transition(
           enter-active-class="animate__animated animate__fadeIn animate__fast",
           leave-active-class="animate__animated animate__fadeOut animate__fast"
         )
-          Markdown(
+          Markdown.full-height(
+            v-bind:style="slides.style",
             :content="slides.content[slides.currentslide]",
             :key="slides.content[slides.currentslide]",
             :inputs="inputs"
@@ -20,6 +21,13 @@ transition(
 </template>
 
 <script>
+import Vue from "vue";
+Vue.component("v-style", {
+  render: function (createElement) {
+    return createElement("style", this.$slots.default);
+  },
+});
+
 import Markdown from "./Markdown.vue";
 
 export default {
@@ -39,6 +47,9 @@ export default {
     visible() {
       if (typeof this.slides.visible == undefined) return true;
       else return this.slides.visible;
+    },
+    getStyle() {
+      return this.slides.style || {};
     },
   },
   data: () => {
@@ -75,7 +86,6 @@ export default {
 
 <style lang="scss">
 .slide {
-  background: rgb(1, 77, 109);
   color: white;
   border-radius: 5px;
   font-size: 26px;
@@ -95,6 +105,8 @@ export default {
 }
 
 .markdown {
+  background: rgb(1, 77, 109);
+
   h1 {
     font-size: 28px;
     padding: 10px;
