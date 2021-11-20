@@ -12,21 +12,25 @@ div
           outlined,
           autogrow,
           :label="input.title",
-          @input="updateField($event, input.field)",
-          :value="inputs[input.field]"
+          @input="updateField($event, input.field, input.type)",
+          :value="input.type === 's-' ? sequenceinputs[input.field] : meetinginputs[input.field]"
         )
     .col-auto
       q-btn(outline, @click="next") Next
     .col-auto
       .scaled_wrap
         .scaled
-          Markdown(:content="nextslide", :inputs="inputs")
+          Markdown(
+            :content="nextslide",
+            :sequenceinputs="sequenceinputs",
+            :meetinginputs="meetinginputs"
+          )
 </template>
 
 <script>
 import Markdown from "./Markdown.vue";
 
-const regex = /^:::\s(.*):(.*)\n$/gm;
+let regex = /^:::\s(s-)?(\w*):(.*)\n\s*:::$/gm;
 
 export default {
   name: "Dashboard",
@@ -44,7 +48,8 @@ export default {
   data: () => {
     return {
       slides: {},
-      inputs: {},
+      sequenceinputs: {},
+      meetinginputs: {},
     };
   },
   computed: {
@@ -57,9 +62,11 @@ export default {
       let inputs = [...text.matchAll(regex)];
 
       return inputs.map((el) => {
+        // console.log(el);
         return {
-          field: el[1],
-          title: el[2],
+          type: el[1] ? el[1] : "m-",
+          field: el[2],
+          title: el[3],
         };
       });
     },
@@ -79,15 +86,22 @@ export default {
     },
   },
   methods: {
-    updateField(event, field) {
-      console.log(event);
+    updateField(event, field, type) {
+      // console.log(`${type}:${field} with ${event}`);
       //write to firebase data node
       //TODO: debounce, and
-
-      //also update the markdown display:
-      this.firebase
-        .ref(`data/${this.context.meetingid}/slides/${field}`)
-        .set(event);
+      if (type === "s-") {
+        // console.log("s");
+        this.firebase
+          .ref(`sequence/${this.context.sequenceid}/data/slides/${field}`)
+          .set(event);
+      } else {
+        // console.log("m");
+        //also update the markdown display:
+        this.firebase
+          .ref(`data/slides/${this.context.meetingid}/${field}`)
+          .set(event);
+      }
     },
     async updateVisible() {
       await this.firebase
@@ -134,8 +148,14 @@ export default {
       async handler() {
         // console.log(this.firebase);
         this.$rtdbBind(
-          "inputs",
-          this.firebase.ref(`data/${this.context.meetingid}/slides`)
+          "sequenceinputs",
+          this.firebase.ref(`sequence/${this.context.sequenceid}/data/slides`)
+        );
+        // } else {
+        //if we should get/save data from the meeting-level
+        this.$rtdbBind(
+          "meetinginputs",
+          this.firebase.ref(`data/slides/${this.context.meetingid}`)
         );
 
         this.$rtdbBind(

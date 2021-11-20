@@ -1,7 +1,7 @@
 {
   "name": "zoomsense-plugin-slides",
   "version": "1.0.0",
-  "description": "Display multiple slides of Markdown formatted text. Slides can include areas where an input can be entered live from the facilitator dashboard, using the format ::: field:Title :::",
+  "description": "Display multiple slides of Markdown formatted text. Slides can include areas where an input can be entered live from the facilitator dashboard, using the format ::: field:Title :::. Use ::: s-field:Title ::: to save data against the current meeting sequence data.",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
@@ -33,6 +33,11 @@
       "style": {
         "desc": "Additional CSS to apply to each slide",
         "type": "String"
+      },
+      "ratio": {
+        "desc": "Aspect ratio of slides",
+        "type": "Float",
+        "default": "1.334"
       }
     }
   }

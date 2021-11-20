@@ -6,7 +6,7 @@ transition(
 )
   .content(v-if="visible")
     .column.justify-center.full-height
-      .slide
+      .slide(:style="{ height: height, width: width }")
         transition(
           mode="out-in",
           enter-active-class="animate__animated animate__fadeIn animate__fast",
@@ -16,7 +16,8 @@ transition(
             v-bind:style="slides.style",
             :content="slides.content[slides.currentslide]",
             :key="slides.content[slides.currentslide]",
-            :inputs="inputs"
+            :sequenceinputs="sequenceinputs",
+            :meetinginputs="meetinginputs"
           )
 </template>
 
@@ -37,6 +38,17 @@ export default {
     Markdown,
   },
   computed: {
+    ratio() {
+      return this.slides.ratio || 4.0 / 3.0;
+    },
+    height() {
+      return `${550 / this.ratio}px`;
+      //- height: 412px;
+      //- width: 550px;
+    },
+    width() {
+      return "550px";
+    },
     visible() {
       if (typeof this.slides.visible == undefined) return true;
       else return this.slides.visible;
@@ -48,7 +60,8 @@ export default {
   data: () => {
     return {
       slides: {},
-      inputs: {},
+      meetinginputs: {},
+      sequenceinputs: {},
     };
   },
   watch: {
@@ -63,10 +76,20 @@ export default {
           )
         );
 
+        // if (this.context.sequenceid) {
+        //if we should save/get data from the sequence level data:
         this.$rtdbBind(
-          "inputs",
-          this.firebase.ref(`data/${this.context.meetingid}/slides`)
+          "sequenceinputs",
+          this.firebase.ref(`sequence/${this.context.sequenceid}/data/slides`)
         );
+        // } else {
+        //if we should get/save data from the meeting-level
+        this.$rtdbBind(
+          "meetinginputs",
+          this.firebase.ref(`data/slides/${this.context.meetingid}`)
+        );
+        // );
+        // }
       },
     },
   },
@@ -83,8 +106,6 @@ export default {
   color: white;
   border-radius: 5px;
   font-size: 26px;
-  height: 412px;
-  width: 550px;
   filter: drop-shadow(0 0 10px black);
   overflow: hidden;
 }

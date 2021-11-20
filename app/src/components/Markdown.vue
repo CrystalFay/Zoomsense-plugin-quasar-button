@@ -5,7 +5,15 @@
 <script>
 const md = require("markdown-it")();
 
-let regex = /^:::\s(.*):.*\n\s*:::$/gm;
+// ::: s-fieldname:Title
+// sequence data
+// :::
+
+// ::: fieldname:Title
+// meeting level data
+// :::
+
+let regex = /^:::\s(s-)?(\w*):.*\n\s*:::$/gm;
 
 export default {
   name: "Markdown",
@@ -13,11 +21,13 @@ export default {
     content: {
       required: true,
     },
-    inputs: {},
+    sequenceinputs: {},
+    meetinginputs: {},
   },
   methods: {
-    getInput(field) {
-      return this.inputs[field] || "";
+    getInput(type, field) {
+      if (type === "s-") return this.sequenceinputs[field] || "";
+      else return this.meetinginputs[field] || "";
     },
   },
   computed: {
@@ -29,9 +39,10 @@ export default {
         let tmp = this.content.toString();
 
         for (let field of inputs) {
+          // console.log(field);
           tmp = tmp.replace(
             field[0],
-            md.utils.escapeHtml(this.getInput(field[1]))
+            md.utils.escapeHtml(this.getInput(field[1], field[2]))
           );
         }
 
