@@ -1,31 +1,31 @@
 <template lang="pug">
 transition(
-  :key="visible",
-  enter-active-class="animate__animated animate__fadeIn animate__fast",
-  leave-active-class="animate__animated animate__fadeOut animate__fast"
+  :key='visible',
+  enter-active-class='animate__animated animate__fadeIn animate__fast',
+  leave-active-class='animate__animated animate__fadeOut animate__fast'
 )
-  .content(v-if="visible")
+  .content(v-if='visible')
     .column.justify-center.full-height
-      .slide(:style="{ height: height, width: width }")
+      .slide(:style='{ height: height, width: width }')
         transition(
-          mode="out-in",
-          enter-active-class="animate__animated animate__fadeIn animate__fast",
-          leave-active-class="animate__animated animate__fadeOut animate__fast"
+          mode='out-in',
+          enter-active-class='animate__animated animate__fadeIn animate__fast',
+          leave-active-class='animate__animated animate__fadeOut animate__fast'
         )
           Markdown.full-height(
-            v-bind:style="slides.style",
-            :content="slides.content[slides.currentslide]",
-            :key="slides.content[slides.currentslide]",
-            :sequenceinputs="sequenceinputs",
-            :meetinginputs="meetinginputs"
+            v-bind:style='slides.style',
+            :content='slides.content[slides.currentslide]',
+            :key='slides.content[slides.currentslide]',
+            :sequenceinputs='sequenceinputs',
+            :meetinginputs='meetinginputs'
           )
 </template>
 
 <script>
-import Markdown from "./Markdown.vue";
+import Markdown from './Markdown.vue';
 
 export default {
-  name: "SlidesOverlay",
+  name: 'SlidesOverlay',
   props: {
     firebase: {
       required: true,
@@ -47,7 +47,7 @@ export default {
       //- width: 550px;
     },
     width() {
-      return "550px";
+      return '550px';
     },
     visible() {
       if (typeof this.slides.visible == undefined) return true;
@@ -70,24 +70,16 @@ export default {
       handler() {
         // console.log(this.firebase);
         this.$rtdbBind(
-          "slides",
-          this.firebase.ref(
-            `config/${this.context.meetingid}/current/currentState/plugins/slides`
-          )
+          'slides',
+          this.firebase.ref(`config/${this.context.meetingid}/current/currentState/plugins/slides`),
         );
 
         // if (this.context.sequenceid) {
         //if we should save/get data from the sequence level data:
-        this.$rtdbBind(
-          "sequenceinputs",
-          this.firebase.ref(`sequence/${this.context.sequenceid}/data/slides`)
-        );
+        this.$rtdbBind('sequenceinputs', this.firebase.ref(`sequence/${this.context.sequenceid}/data/slides`));
         // } else {
         //if we should get/save data from the meeting-level
-        this.$rtdbBind(
-          "meetinginputs",
-          this.firebase.ref(`data/slides/${this.context.meetingid}`)
-        );
+        this.$rtdbBind('meetinginputs', this.firebase.ref(`data/slides/${this.context.meetingid}`));
         // );
         // }
       },

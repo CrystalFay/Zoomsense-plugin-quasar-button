@@ -1,9 +1,9 @@
 <template lang="pug">
-.markdown(v-html="mark")
+.markdown(v-html='mark')
 </template>
 
 <script>
-const md = require("markdown-it")();
+const md = require('markdown-it')();
 
 // ::: s-fieldname:Title
 // sequence data
@@ -16,7 +16,7 @@ const md = require("markdown-it")();
 let regex = /^:::\s(s-)?(\w*):.*\n\s*:::$/gm;
 
 export default {
-  name: "Markdown",
+  name: 'Markdown',
   props: {
     content: {
       required: true,
@@ -26,8 +26,8 @@ export default {
   },
   methods: {
     getInput(type, field) {
-      if (type === "s-") return this.sequenceinputs[field] || "";
-      else return this.meetinginputs[field] || "";
+      if (type === 's-') return this.sequenceinputs[field] || '';
+      else return this.meetinginputs[field] || '';
     },
   },
   computed: {
@@ -40,10 +40,7 @@ export default {
 
         for (let field of inputs) {
           // console.log(field);
-          tmp = tmp.replace(
-            field[0],
-            md.utils.escapeHtml(this.getInput(field[1], field[2]))
-          );
+          tmp = tmp.replace(field[0], md.utils.escapeHtml(this.getInput(field[1], field[2])));
         }
 
         return md.render(tmp);

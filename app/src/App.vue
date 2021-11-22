@@ -12,21 +12,21 @@
 </template>
 
 <script>
-import Dashboard from "./components/Dashboard.vue";
-import Overlay from "./components/Overlay.vue";
+import Dashboard from './components/Dashboard.vue';
+import Overlay from './components/Overlay.vue';
 
 // Get a RTDB instance
-import firebase from "firebase/app";
-import "firebase/database";
+import firebase from 'firebase/app';
+import 'firebase/database';
 
 export const db = firebase
   .initializeApp({
-    databaseURL: "https://zoomsense-plugin-default-rtdb.firebaseio.com/",
+    databaseURL: 'https://zoomsense-plugin-default-rtdb.firebaseio.com/',
   })
   .database();
 
 export default {
-  name: "App",
+  name: 'App',
   components: {
     Dashboard,
     Overlay,
@@ -35,8 +35,8 @@ export default {
     return {
       db: db,
       context: {
-        meetingid: "3",
-        sequenceid: "user2",
+        meetingid: '3',
+        sequenceid: 'user2',
       },
     };
   },
