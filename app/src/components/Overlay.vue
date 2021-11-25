@@ -76,10 +76,10 @@ export default {
 
         // if (this.context.sequenceid) {
         //if we should save/get data from the sequence level data:
-        this.$rtdbBind('sequenceinputs', this.firebase.ref(`sequence/${this.context.sequenceid}/data/slides`));
+        this.$rtdbBind('sequenceinputs', this.firebase.ref(`sequence/slides/${this.context.sequenceid}/current`));
         // } else {
         //if we should get/save data from the meeting-level
-        this.$rtdbBind('meetinginputs', this.firebase.ref(`data/slides/${this.context.meetingid}`));
+        this.$rtdbBind('meetinginputs', this.firebase.ref(`data/slides/${this.context.meetingid}/current`));
         // );
         // }
       },

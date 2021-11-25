@@ -109,7 +109,7 @@ export default {
       //TODO: debounce, and
       if (type === 's-') {
         this.firebase
-          .ref(`sequence/${this.context.sequenceid}/data/slides/current/${field}`)
+          .ref(`sequence/slides/${this.context.sequenceid}/current/${field}`)
           .set(this.$refs.toastuiEditor[0].invoke('getMarkdown'));
       } else {
         this.firebase
@@ -153,7 +153,7 @@ export default {
       immediate: true,
       async handler() {
         // console.log(this.firebase);
-        this.$rtdbBind('sequenceinputs', this.firebase.ref(`sequence/${this.context.sequenceid}/data/slides/current`));
+        this.$rtdbBind('sequenceinputs', this.firebase.ref(`sequence/slides/${this.context.sequenceid}/current`));
         // } else {
         //if we should get/save data from the meeting-level
         this.$rtdbBind('meetinginputs', this.firebase.ref(`data/slides/${this.context.meetingid}/current/`));
