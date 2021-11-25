@@ -1,34 +1,47 @@
 <template lang="pug">
 div
-  .row.items-center
+  .row.q-gutter-md
     .col-auto
-      q-toggle(v-model="slides.visible", @input="updateVisible()") Visible
+      .row.items-center
+        .scaled_wrap.relative-position
+          .absolute-top-right
+            q-badge Current
+          .scaled
+            Markdown(
+              :content="currentslidecontent",
+              :sequenceinputs="sequenceinputs",
+              :meetinginputs="meetinginputs"
+            )
+      .row.items-center.q-mt-sm
+        q-toggle(v-model="slides.visible", @input="updateVisible()")
+        q-btn(@click="prev", outline, round, icon="chevron_left")
+        .col.text-center {{ currentSlide }} of {{ totalSlides }}
+        q-btn(outline, @click="next", round, icon="chevron_right")
     .col-auto
-      q-btn(@click="prev", outline) Prev
-    .col.text-center {{ currentSlide }} of {{ totalSlides }}
-    .col 
-      div(v-for="input in getInputs", :key="input.field")
-        q-input(
-          outlined,
-          autogrow,
-          :label="input.title",
-          @input="updateField($event, input.field, input.type)",
-          :value="input.type === 's-' ? sequenceinputs[input.field] : meetinginputs[input.field]"
-        )
-    .col-auto
-      q-btn(outline, @click="next") Next
-    .col-auto
-      .scaled_wrap
+      .scaled_wrap.relative-position
+        .absolute-top-right
+          q-badge Next
         .scaled
           Markdown(
             :content="nextslide",
             :sequenceinputs="sequenceinputs",
             :meetinginputs="meetinginputs"
           )
+    .col
+      div(v-for="input in getInputs", :key="input.field")
+        Editor(
+          :initialValue="input.type === 's-' ? sequenceinputs[input.field] : meetinginputs[input.field]",
+          :options="editoroptions",
+          initialEditType="wysiwyg",
+          ref="toastuiEditor",
+          @change="updateField(this, input.field, input.type)"
+        )
 </template>
 
 <script>
 import Markdown from "./Markdown.vue";
+import "@toast-ui/editor/dist/toastui-editor.css";
+import { Editor } from "@toast-ui/vue-editor";
 
 let regex = /^:::\s(s-)?(\w*):(.*)\n\s*:::$/gm;
 
@@ -44,12 +57,20 @@ export default {
   },
   components: {
     Markdown,
+    Editor,
   },
   data: () => {
     return {
       slides: {},
       sequenceinputs: {},
       meetinginputs: {},
+      editoroptions: {
+        minHeight: "200px",
+        usageStatistics: false,
+        hideModeSwitch: true,
+
+        toolbarItems: [["bold", "italic", "ul", "task", "image"]],
+      },
     };
   },
   computed: {
@@ -84,23 +105,32 @@ export default {
         return this.slides.content[this.slides.currentslide + 1];
       else return "";
     },
+    currentslidecontent() {
+      if (
+        this.slides.content &&
+        this.slides.content.length > this.slides.currentslide
+      )
+        return this.slides.content[this.slides.currentslide];
+      else return "";
+    },
   },
   methods: {
     updateField(event, field, type) {
+      // console.log();
+
       // console.log(`${type}:${field} with ${event}`);
       //write to firebase data node
       //TODO: debounce, and
       if (type === "s-") {
-        // console.log("s");
         this.firebase
-          .ref(`sequence/${this.context.sequenceid}/data/slides/${field}`)
-          .set(event);
+          .ref(
+            `sequence/${this.context.sequenceid}/data/slides/current/${field}`
+          )
+          .set(this.$refs.toastuiEditor[0].invoke("getMarkdown"));
       } else {
-        // console.log("m");
-        //also update the markdown display:
         this.firebase
-          .ref(`data/slides/${this.context.meetingid}/${field}`)
-          .set(event);
+          .ref(`data/slides/${this.context.meetingid}/current/${field}`)
+          .set(this.$refs.toastuiEditor[0].invoke("getMarkdown"));
       }
     },
     async updateVisible() {
@@ -149,13 +179,15 @@ export default {
         // console.log(this.firebase);
         this.$rtdbBind(
           "sequenceinputs",
-          this.firebase.ref(`sequence/${this.context.sequenceid}/data/slides`)
+          this.firebase.ref(
+            `sequence/${this.context.sequenceid}/data/slides/current`
+          )
         );
         // } else {
         //if we should get/save data from the meeting-level
         this.$rtdbBind(
           "meetinginputs",
-          this.firebase.ref(`data/slides/${this.context.meetingid}`)
+          this.firebase.ref(`data/slides/${this.context.meetingid}/current/`)
         );
 
         this.$rtdbBind(
@@ -170,10 +202,17 @@ export default {
 };
 </script>
 
+<style lang="scss">
+.ProseMirror.toastui-editor-contents {
+  padding: 4px 10px !important;
+}
+</style>
+
 <style lang="scss" scoped>
 .scaled {
   width: 550px;
-  background: silver;
+  // background: silver;
+
   height: 412px;
   overflow: hidden;
   transform: scale(0.4);
@@ -184,5 +223,7 @@ export default {
   width: 219px;
   overflow: hidden;
   height: 165px;
+  border: 1px solid silver;
+  border-radius: 5px;
 }
 </style>
