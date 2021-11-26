@@ -27,7 +27,7 @@
       },
       "slides": {
         "desc": "List of slide content. Can include data input blocks.",
-        "type": "Array",
+        "type": "Array[Markdown]",
         "required": true
       },
       "style": {
