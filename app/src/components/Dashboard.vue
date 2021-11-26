@@ -25,6 +25,7 @@ div
           :initialValue='input.type === "s-" ? sequenceinputs[input.field] : meetinginputs[input.field]',
           :options='editoroptions',
           initialEditType='wysiwyg',
+          :height='"auto"',
           ref='toastuiEditor',
           @change='updateField(this, input.field, input.type)'
         )
@@ -57,10 +58,8 @@ export default {
       sequenceinputs: {},
       meetinginputs: {},
       editoroptions: {
-        minHeight: '200px',
         usageStatistics: false,
         hideModeSwitch: true,
-
         toolbarItems: [['bold', 'italic', 'ul', 'task', 'image']],
       },
     };
