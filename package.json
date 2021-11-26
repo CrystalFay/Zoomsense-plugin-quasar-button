@@ -15,6 +15,7 @@
   "zoomsense": {
     "displayname": "Slides",
     "requires": {},
+    "icon": "slideshow",
     "exports": [
       "Dashboard",
       "Overlay"
