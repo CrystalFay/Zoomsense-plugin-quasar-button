@@ -14,12 +14,12 @@ exports.onSlideInputMeeting = functions.database
   });
 
 exports.onSlideInputSequence = functions.database
-  .ref('/sequence/{sequenceid}/slides/current/{field}')
+  .ref('/sequence/slides/{sequenceid}/current/{field}')
   .onWrite(async (change, context) => {
     // functions.logger.log(change.after);
     const timestamp = Date.now();
     await db
-      .ref(`/sequence/${context.params.sequenceid}/_history/${timestamp}/${context.params.field}`)
+      .ref(`/sequence/slides/${context.params.sequenceid}/_history/${timestamp}/${context.params.field}`)
       .set(change.after.val());
   });
 
