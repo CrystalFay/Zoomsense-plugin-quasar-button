@@ -60,7 +60,7 @@ export default {
       editoroptions: {
         usageStatistics: false,
         hideModeSwitch: true,
-        toolbarItems: [['bold', 'italic', 'ul', 'task', 'image']],
+        toolbarItems: [['bold', 'italic', 'ul', 'image']],
       },
     };
   },

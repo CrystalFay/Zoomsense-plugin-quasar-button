@@ -3,7 +3,8 @@
 </template>
 
 <script>
-const md = require('markdown-it')();
+var taskLists = require('markdown-it-task-lists');
+const md = require('markdown-it')().use(taskLists, { enabled: true });
 
 // ::: s-fieldname:Title
 // sequence data
@@ -62,6 +63,10 @@ export default {
   }
 
   font-weight: 300;
+
+  .task-list-item-checkbox {
+    transform: scale(1.7) translate(0, -2px);
+  }
 
   ul {
     margin-left: 10px;
