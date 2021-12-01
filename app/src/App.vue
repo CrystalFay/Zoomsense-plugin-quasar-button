@@ -13,7 +13,7 @@
 
 <script>
 import Dashboard from './components/Dashboard.vue';
-import Overlay from './components/Overlay.vue';
+//import Overlay from './components/Overlay.vue';
 
 // Get a RTDB instance
 import firebase from 'firebase/app';
@@ -29,7 +29,7 @@ export default {
   name: 'App',
   components: {
     Dashboard,
-    Overlay,
+    //Overlay,
   },
   data: () => {
     return {
